@@ -4,11 +4,11 @@
  * and open the template in the editor.
  */
 package com.AppStore.domain;
+
 /**
- *
  * @author HP
  */
 public enum AppCategory {
-    APPS,GAMES
+    APPS, GAMES
 }
 
