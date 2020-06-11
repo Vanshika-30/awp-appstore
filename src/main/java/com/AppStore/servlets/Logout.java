@@ -1,5 +1,7 @@
 package com.AppStore.servlets;
 import java.io.IOException;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -14,7 +16,10 @@ public class Logout extends HttpServlet {
 
         HttpSession session = request.getSession();
         session.removeAttribute("uname");
+        session.setAttribute("LoggedIn", false);
         session.invalidate();
-        response.sendRedirect("login.jsp");
+        ServletContext context = getServletContext();
+        RequestDispatcher dispatch = context.getRequestDispatcher("/login.jsp");
+        dispatch.forward(request, response);
     }
 }

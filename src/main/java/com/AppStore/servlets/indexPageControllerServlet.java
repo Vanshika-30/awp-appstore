@@ -19,6 +19,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  * @author HP
@@ -42,6 +43,10 @@ public class indexPageControllerServlet extends HttpServlet {
         } catch (ClassNotFoundException ex) {
             System.out.println("Error: unable to load driver class!");
             System.exit(1);
+        }
+        HttpSession session = request.getSession();
+        if(session.getAttribute("LoggedIn") == null){
+            session.setAttribute("LoggedIn", false);
         }
         response.setContentType("text/html;charset=UTF-8");
         AppDao appData = DataConnection.getAppDao();

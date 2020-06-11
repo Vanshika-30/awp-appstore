@@ -3,6 +3,8 @@ import com.AppStore.data.LoginDao;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -23,14 +25,18 @@ public class Login extends HttpServlet {
         if(uname.isEmpty() || pass.isEmpty()){
             String msg = "Fields can't be empty...";
             request.getSession().setAttribute("msg", msg);
-            response.sendRedirect("login.jsp");
+            ServletContext context = getServletContext();
+            RequestDispatcher dispatch = context.getRequestDispatcher("/login.jsp");
+            dispatch.forward(request, response);
         }
 
         if(type.equals("admin")) {
             if(uname.equals("admin") && pass.equals("admin")) {
                 HttpSession session = request.getSession();
                 session.setAttribute("uname", uname);
-                response.sendRedirect("admin.jsp");
+                ServletContext context = getServletContext();
+                RequestDispatcher dispatch = context.getRequestDispatcher("/admin.jsp");
+                dispatch.forward(request, response);
             }
         }
         else {
@@ -42,12 +48,17 @@ public class Login extends HttpServlet {
 //					System.out.println("granted");
                     HttpSession session = request.getSession();
                     session.setAttribute("uname", uname);
-                    response.sendRedirect("index.jsp");
+                    ServletContext context = getServletContext();
+                    session.setAttribute("LoggedIn", true);
+                    RequestDispatcher dispatch = context.getRequestDispatcher("/index.html");
+                    dispatch.forward(request, response);
                 }
                 else {
                     String msg = "Incorrect username or password...";
                     request.getSession().setAttribute("msg", msg);
-                    response.sendRedirect("login.jsp");
+                    ServletContext context = getServletContext();
+                    RequestDispatcher dispatch = context.getRequestDispatcher("/login.jsp");
+                    dispatch.forward(request, response);
                 }
             } catch (SQLException | IOException e) {
 
