@@ -8,6 +8,7 @@ package com.AppStore.servlets;
 import com.AppStore.data.AppDao;
 import com.AppStore.data.DataConnection;
 import com.AppStore.domain.Application;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
@@ -20,7 +21,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- *
  * @author HP
  */
 @WebServlet(name = "categoryControllerServlet", urlPatterns = {"/category.html"})
@@ -30,32 +30,33 @@ public class categoryControllerServlet extends HttpServlet {
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
      *
-     * @param request servlet request
+     * @param request  servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     * @throws IOException      if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String category = String.valueOf(request.getParameter("category"));
-        AppDao appData=DataConnection.getAppDao();
+        AppDao appData = DataConnection.getAppDao();
         List<Application> appList = appData.getFullApplication();
         request.setAttribute("appList", appList);
-        request.setAttribute("category",category);
+        request.setAttribute("category", category);
         ServletContext context = getServletContext();
         RequestDispatcher dispatch = context.getRequestDispatcher("/categoryPage.jsp");
-        dispatch.forward(request,response);
+        dispatch.forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+
     /**
      * Handles the HTTP <code>GET</code> method.
      *
-     * @param request servlet request
+     * @param request  servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     * @throws IOException      if an I/O error occurs
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -66,10 +67,10 @@ public class categoryControllerServlet extends HttpServlet {
     /**
      * Handles the HTTP <code>POST</code> method.
      *
-     * @param request servlet request
+     * @param request  servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     * @throws IOException      if an I/O error occurs
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
