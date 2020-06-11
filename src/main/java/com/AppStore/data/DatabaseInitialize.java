@@ -35,6 +35,10 @@ public class DatabaseInitialize {
                 prepStm.execute();
             }
 
+//            try (PreparedStatement prepStm = conn.prepareStatement("DROP TABLE IF EXISTS customerData;")) {
+//                prepStm.execute();
+//            }
+
             try (PreparedStatement prepStm = conn.prepareStatement("CREATE TABLE apps (id int primary key, name varchar(30), description varchar(150), category varchar(30), downloads int,rating double,logo varchar(200),version double);")) {
                 prepStm.execute();
             }
@@ -55,6 +59,9 @@ public class DatabaseInitialize {
             }
 
             try (PreparedStatement prepStm = conn.prepareStatement("CREATE TABLE downloads (id int auto_increment primary key, customer varchar(30), contents varchar(255), status varchar(20),percentage int);")) {
+                prepStm.execute();
+            }
+            try (PreparedStatement prepStm = conn.prepareStatement("CREATE TABLE IF NOT EXISTS customerData (Name varchar(30), Email varchar(30), Telephone varchar(20),Password varchar(25));")) {
                 prepStm.execute();
             }
         } catch (SQLException e) {

@@ -21,7 +21,7 @@
                 </li>
                 <c:if test='${!sessionScope["loggedIn"]}'>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Login</a>
+                        <a class="nav-link" href="login.jsp">Login</a>
                     </li>
                 </c:if>
                 <c:if test='${sessionScope["loggedIn"]}'>
