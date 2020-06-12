@@ -40,6 +40,17 @@
                 <li class="nav-item">
                     <a class="nav-link" href="#">Contact</a>
                 </li>
+                <li class="nav-item">
+                    <form action="searchResults.html" method="POST">
+                    
+                        <input type="text" name="searchTerm" id="searchTerm" /> <button id="myButton"  >Search</button>
+                         <script type="text/javascript">
+                        document.getElementById("myButton").onclick = function () {
+                            location.href = "searchResults.html";
+                        };
+                    </script>
+                    </form>
+                </li>
             </ul>
         </div>
     </div>
