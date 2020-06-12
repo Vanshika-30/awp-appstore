@@ -33,7 +33,7 @@
                             <a class="nav-link" href="Logout">Logout</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">My downloads</a>
+                            <a class="nav-link" href="download.html?appId=-1">My downloads</a>
                         </li>
                     </c:otherwise>
                 </c:choose>

@@ -51,8 +51,10 @@ public class UserDownloads extends HttpServlet {
         String userName = String.valueOf(session.getAttribute("uname"));
         System.out.println("USERNAME!!!!!!!!!!!!!!!!!!!!!!!!!" + userName);
         appData.getUserDownloads(userName);
-        Application app = appData.getItem(appId);
-        appData.addToDownloads(userName, app, app.getVersion());
+        if (appId != -1) {
+            Application app = appData.getItem(appId);
+            appData.addToDownloads(userName, app, app.getVersion());
+        }
         Downloads userDownloads = appData.getUserDownloads(userName);
         System.out.println(userDownloads.getApplications().toString());
         request.setAttribute("appList", userDownloads.getApplications());
