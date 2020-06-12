@@ -6,6 +6,7 @@
 
 <%@page import="java.util.List" %>
 <%@page import="com.AppStore.domain.Application" %>
+<%@page import="com.AppStore.domain.AppCategory" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
@@ -29,13 +30,21 @@
 
     <div class="row">
         <jsp:include page="/sidebar.jsp"/>
-
+        <c:set var="cat" value='${app.getCategory()}'/>
         <div class="col-lg-9">
-
+            <c:set var="check" value='${sessionScope["LoggedIn"]}'/>
+            <c:set var="msg" value='${(cat==AppCategory.BETA)?"Subscribe":"Download"}'/>
             <div class="card mt-4" style="display:flex;">
                 <img class="card-img-top img-fluid" src='${app.getLogo()}' alt="${app.getName()}"
                      style="width:fit-content;height:auto">
-                <span class='text-right'><a href="#"><button class='btn btn-primary'>Download</button></a></span>
+                <c:choose>
+                    <c:when test="${check == true}">
+                        <span class='text-right'><a href="#"><button class='btn btn-primary'><c:out value='${msg}'/></button></a></span>
+                    </c:when>
+                    <c:otherwise>
+                        <span class='text-right'><a href="login.jsp"><button class='btn btn-primary'>Login to <c:out value='${msg}'/></button></a></span>
+                    </c:otherwise>
+                </c:choose>
                 <div class="card-body">
                     <h3 class="card-title"><c:out value="${app.getName()}"/></h3>
                     <p class="card-text"><c:out value="${app.getDescription()}"/></p>
