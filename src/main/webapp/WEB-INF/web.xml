@@ -11,4 +11,12 @@
         <servlet-name>indexPageControllerServlet</servlet-name>
         <url-pattern>/index.html</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>UserDownloads</servlet-name>
+        <servlet-class>com.AppStore.servlets.UserDownloads</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>UserDownloads</servlet-name>
+        <url-pattern>/download.html</url-pattern>
+    </servlet-mapping>
 </web-app>

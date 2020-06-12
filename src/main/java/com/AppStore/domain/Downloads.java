@@ -5,7 +5,9 @@
  */
 package com.AppStore.domain;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -17,7 +19,7 @@ public class Downloads {
     private String status;
     private String customer;
     private int percentage;
-    
+
 
     public void addToDownloads(Application app, Double ver) {
         Double currentVersion = 0d;
@@ -41,6 +43,11 @@ public class Downloads {
             sb.append(app.getName()).append(" :VER(").append(currentApp.get(app)).append(")<br/>");
         }
         return sb.toString();
+    }
+
+    public List<Application> getApplications() {
+        List<Application> currentApps = new ArrayList<>(currentApp.keySet());
+        return currentApps;
     }
 
     public Long getId() {

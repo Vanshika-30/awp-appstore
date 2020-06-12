@@ -20,6 +20,7 @@ import com.AppStore.domain.AppCategory;
 import com.AppStore.domain.Application;
 import com.AppStore.domain.Downloads;
 import com.AppStore.utils.Utils;
+import com.mysql.cj.jdbc.result.ResultSetImpl;
 
 public class AppDao {
 
@@ -166,11 +167,11 @@ public class AppDao {
         return contents;
     }
 
-    public void addToDownloads(Long id, Application item, Double version) {
+    public void addToDownloads(String userName, Application item, Double version) {
         try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/zenithdb", "root", Utils.SQL_PASSWORD);
              Statement stm = conn.createStatement();
-             ResultSet res = stm.executeQuery("SELECT * FROM downloads WHERE ID = " + id);
-             PreparedStatement stmUpdate = conn.prepareStatement("UPDATE downloads SET contents = ? WHERE id = ?");
+             ResultSet res = stm.executeQuery("SELECT * FROM downloads WHERE customer = '" + userName + "'");
+             PreparedStatement stmUpdate = conn.prepareStatement("UPDATE downloads SET contents = ? WHERE customer = ?");
         ) {
             res.next();
             String contents = res.getString("contents");
@@ -182,7 +183,7 @@ public class AppDao {
             }
             contents = convertDownloadsMapToContents(orderMap);
             stmUpdate.setString(1, contents);
-            stmUpdate.setLong(2, id);
+            stmUpdate.setString(2, userName);
             stmUpdate.execute();
 
         } catch (SQLException e) {
@@ -220,6 +221,27 @@ public class AppDao {
             stmUpdate.setLong(2, id);
             stmUpdate.execute();
 
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public Downloads getUserDownloads(String userName) {
+        List<Application> retval = new ArrayList<>();
+        try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/zenithdb", "root", Utils.SQL_PASSWORD);
+             Statement stm = conn.createStatement();
+             ResultSet res = stm.executeQuery("SELECT * FROM downloads WHERE customer = '" + userName + "'");
+        ) {
+            if (!res.next()) {
+                return newDownloads(userName);
+            }
+            Map<Application, Double> orderMap = convertContentsToDownloadsMap(res.getString("contents"));
+            Downloads order = new Downloads();
+            order.setCustomer(res.getString("customer"));
+            order.setId(res.getLong("id"));
+            order.setStatus(res.getString("status"));
+            order.setContents(orderMap);
+            return order;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

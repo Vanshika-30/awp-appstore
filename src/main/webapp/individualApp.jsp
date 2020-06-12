@@ -39,7 +39,7 @@
                      style="width:fit-content;height:auto">
                 <c:choose>
                     <c:when test="${check == true}">
-                        <span class='text-right'><a href="#"><button class='btn btn-primary'><c:out value='${msg}'/></button></a></span>
+                        <span class='text-right'><a href="download.html?appId=${app.getId()}"><button class='btn btn-primary'><c:out value='${msg}'/></button></a></span>
                     </c:when>
                     <c:otherwise>
                         <span class='text-right'><a href="login.jsp"><button class='btn btn-primary'>Login to <c:out value='${msg}'/></button></a></span>
