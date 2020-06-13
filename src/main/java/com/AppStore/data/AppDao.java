@@ -53,6 +53,27 @@ public class AppDao {
         return orders;
     }
 
+    
+    public List<MysubscriptionDao> getAllmysubscriptions(String uname) {
+        List<MysubscriptionDao> orders = new ArrayList<>();
+        try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/zenithdb", "root", Utils.SQL_PASSWORD);
+             Statement stm = conn.createStatement();
+        ) {
+
+            ResultSet results = stm.executeQuery("SELECT * FROM mysubscriptiondb where username=?");
+
+            while (results.next()) {
+                MysubscriptionDao order = new MysubscriptionDao();
+                order.setId(results.getLong("id"));
+                 order.setCustomer(results.getString("username"));
+                order.setStatus(results.getString("status"));
+                orders.add(order);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return orders;
+    }
 
     private List<Application> buildApplication(ResultSet results) throws SQLException {
         List<Application> items = new ArrayList<>();
