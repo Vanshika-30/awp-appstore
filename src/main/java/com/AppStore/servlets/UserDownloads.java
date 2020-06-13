@@ -57,7 +57,7 @@ public class UserDownloads extends HttpServlet {
         }
         Downloads userDownloads = appData.getUserDownloads(userName);
         System.out.println(userDownloads.getApplications().toString());
-        request.setAttribute("appList", userDownloads.getApplications());
+        session.setAttribute("appLs", userDownloads.getApplications());
         ServletContext context = getServletContext();
         RequestDispatcher dispatch = context.getRequestDispatcher("/downloadsPage.jsp");
         dispatch.forward(request, response);

@@ -19,6 +19,7 @@
     <meta name="author" content="">
     <!-- Bootstrap core CSS -->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <!-- Custom styles for this template -->
     <link href="css/shop-homepage.css" rel="stylesheet">
 
@@ -31,7 +32,7 @@
         <jsp:include page="/sidebar.jsp"/>
         <div class="col-lg-9">
             <div class="row">
-                <c:set var="item" value='${requestScope["appList"]}'/>
+                <c:set var="item" value='${sessionScope["appLs"]}'/>
                 <c:forEach var="app" items="${item}">
                     <div class="col-lg-4 col-md-6 mb-4">
                         <div class="card h-100">

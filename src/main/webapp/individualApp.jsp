@@ -19,10 +19,27 @@
     <meta name="author" content="">
     <!-- Bootstrap core CSS -->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <!-- Custom styles for this template -->
     <link href="css/shop-homepage.css" rel="stylesheet">
     <c:set var="app" value='${requestScope["app"]}'/>
     <title><c:out value="${app.getName()}"/></title>
+    
+    <script>
+        function updateStatus(){
+            var request = new XMLHttpRequest();
+            request.onreadystatechange = function(){
+                if(this.readyState == 4){
+                    document.getElementById("status").innerHTML = request.responseText;
+                }
+            };
+            request.open("GET","individualPage.html?id=${id}",true);
+            request.send();
+        }
+        window.setInterval(function(){
+            updateStatus();
+        },2000);
+    </script>
 </head>
 <body>
 <jsp:include page="/header.jsp"/>
@@ -34,12 +51,19 @@
         <div class="col-lg-9">
             <c:set var="check" value='${sessionScope["LoggedIn"]}'/>
             <c:set var="msg" value='${(cat==AppCategory.BETA)?"Subscribe":"Download"}'/>
+            <c:set var="status" value='${sessionScope["status"]}'/>
             <div class="card mt-4" style="display:flex;">
                 <img class="card-img-top img-fluid" src='${app.getLogo()}' alt="${app.getName()}"
                      style="width:fit-content;height:auto">
                 <c:choose>
-                    <c:when test="${check == true}">
+                    <c:when test="${check == true && cat!=AppCategory.BETA}">
                         <span class='text-right'><a href="download.html?appId=${app.getId()}"><button class='btn btn-primary'><c:out value='${msg}'/></button></a></span>
+                    </c:when>
+                    <c:when test='${check == true && cat == AppCategory.BETA && (status == "none" || status == null)}'>
+                        <span class='text-right'><a href="download.html?appId=${app.getId()}"><button class='btn btn-primary'><c:out value='${msg}'/></button></a></span>
+                    </c:when>
+                    <c:when test="${check == true && cat==AppCategory.BETA}">
+                            <span class='text-right'><c:out value="${status}"/></span>
                     </c:when>
                     <c:otherwise>
                         <span class='text-right'><a href="login.jsp"><button class='btn btn-primary'>Login to <c:out value='${msg}'/></button></a></span>
@@ -58,9 +82,16 @@
 
                 <c:set var="id1" value="${app.getId()}"/>
                 <c:set var="item" value='${requestScope["appList"]}'/>
+                <c:set var="ott" value='${sessionScope["appLs"]}'/>
                 <c:forEach var="appli" items="${item}">
+                    <c:set var="check" value="${false}"/>
+                    <c:forEach var="op" items="${ott}">
+                        <c:if test="${op.getId()==appli.getId()}">
+                            <c:set var="check" value="${true}"/>
+                        </c:if>
+                    </c:forEach>
                     <c:set var="id2" value="${appli.getId()}"/>
-                    <c:if test="${id1!=id2}">
+                    <c:if test="${id1!=id2 && !check}">
                         <div class="col-lg-4 col-md-6 mb-4">
                             <div class="card h-100">
                                 <a href="individualPage.html?id=${appli.getId()}"><img class="card-img-top"

@@ -1,5 +1,5 @@
 package com.AppStore.utils;
 
 public class Utils {
-    public static String SQL_PASSWORD = "clasicoelmadrid111";
+    public static String SQL_PASSWORD = "clasicoelmadrid10";
 }
