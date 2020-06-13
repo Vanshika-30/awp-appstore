@@ -9,8 +9,6 @@ import com.AppStore.data.AppDao;
 import com.AppStore.data.DataConnection;
 import com.AppStore.domain.Application;
 import java.io.IOException;
-import static java.lang.System.out;
-import static java.sql.JDBCType.NULL;
 import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;

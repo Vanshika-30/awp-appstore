@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -49,17 +50,17 @@ public class UserDownloads extends HttpServlet {
             dispatch.forward(request, response);
         }
         String userName = String.valueOf(session.getAttribute("uname"));
-        System.out.println("USERNAME!!!!!!!!!!!!!!!!!!!!!!!!!" + userName);
-        appData.getUserDownloads(userName);
+        appData.getDownloadsN(userName);
         if (appId != -1) {
             Application app = appData.getItem(appId);
-            appData.addToDownloads(userName, app, app.getVersion());
+            try {
+                appData.addAppToDownloads(userName, app);
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
         }
-        Downloads userDownloads = appData.getUserDownloads(userName);
-        System.out.println(userDownloads.getApplications().toString());
-        session.setAttribute("appLs", userDownloads.getApplications());
         ServletContext context = getServletContext();
-        RequestDispatcher dispatch = context.getRequestDispatcher("/downloadsPage.jsp");
+        RequestDispatcher dispatch = context.getRequestDispatcher("/order_status.jsp");
         dispatch.forward(request, response);
     }
 

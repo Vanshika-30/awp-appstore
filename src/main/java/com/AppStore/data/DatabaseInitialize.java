@@ -83,7 +83,7 @@ public class DatabaseInitialize {
                 }
             }
 
-            try (PreparedStatement prepStm = conn.prepareStatement("CREATE TABLE downloads (id int auto_increment primary key, customer varchar(30), contents varchar(255), status varchar(20),percentage int);")) {
+            try (PreparedStatement prepStm = conn.prepareStatement("CREATE TABLE downloads (userName varchar(30), contents TEXT);")) {
                 prepStm.execute();
             }
             try (PreparedStatement prepStm = conn.prepareStatement("CREATE TABLE IF NOT EXISTS customerData (Name varchar(30), Email varchar(30), Telephone varchar(20),Password varchar(25));")) {

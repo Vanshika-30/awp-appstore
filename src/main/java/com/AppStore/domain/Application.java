@@ -5,6 +5,8 @@
  */
 package com.AppStore.domain;
 
+import com.google.gson.Gson;
+
 /**
  * @author HP
  */
@@ -99,5 +101,10 @@ public class Application {
     @Override
     public String toString() {
         return (this.category + "\t\t " + this.name + " \nRating: " + this.rating + "");
+    }
+
+    public String json() {
+        Gson gson = new Gson();
+        return gson.toJson(this);
     }
 }

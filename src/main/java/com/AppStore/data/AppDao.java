@@ -19,6 +19,7 @@ import java.util.Map;
 import com.AppStore.domain.AppCategory;
 import com.AppStore.domain.Application;
 import com.AppStore.domain.Downloads;
+import com.AppStore.domain.UserDownloadsStatus;
 import com.AppStore.utils.Utils;
 import com.mysql.cj.jdbc.result.ResultSetImpl;
 
@@ -53,7 +54,7 @@ public class AppDao {
         return orders;
     }
 
-    
+
     public List<MysubscriptionDao> getAllmysubscriptions(String uname) {
         List<MysubscriptionDao> orders = new ArrayList<>();
         try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/zenithdb", "root", Utils.SQL_PASSWORD);
@@ -65,7 +66,7 @@ public class AppDao {
             while (results.next()) {
                 MysubscriptionDao order = new MysubscriptionDao();
                 order.setId(results.getLong("id"));
-                 order.setCustomer(results.getString("username"));
+                order.setCustomer(results.getString("username"));
                 order.setStatus(results.getString("status"));
                 orders.add(order);
             }
@@ -265,6 +266,72 @@ public class AppDao {
             return order;
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    public void newDownloadsN(String username) throws SQLException {
+        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/zenithdb", "root", Utils.SQL_PASSWORD);
+        String STATEMENT = "INSERT INTO downloads (userName, contents) values (?, '')";
+        PreparedStatement stmt = conn.prepareStatement(STATEMENT);
+        stmt.setString(1, username);
+        stmt.execute();
+    }
+
+    public UserDownloadsStatus getDownloadsNConn(String userName, Connection conn) {
+        UserDownloadsStatus retval = null;
+        try {
+            String QUERY = "SELECT * FROM downloads WHERE userName = ?";
+            PreparedStatement stmt = conn.prepareStatement(QUERY);
+            stmt.setString(1, userName);
+            ResultSet results = stmt.executeQuery();
+            if (!results.next()) {
+                newDownloadsN(userName);
+                return getDownloadsN(userName);
+            }
+            retval = new UserDownloadsStatus(results.getString("userName"), results.getString("contents"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return retval;
+    }
+
+    public UserDownloadsStatus getDownloadsN(String userName) {
+        UserDownloadsStatus retval = null;
+        try {
+            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/zenithdb", "root", Utils.SQL_PASSWORD);
+            String QUERY = "SELECT * FROM downloads WHERE userName = ?";
+            PreparedStatement stmt = conn.prepareStatement(QUERY);
+            stmt.setString(1, userName);
+            ResultSet results = stmt.executeQuery();
+            if (!results.next()) {
+                newDownloadsN(userName);
+                return getDownloadsN(userName);
+            }
+            retval = new UserDownloadsStatus(results.getString("userName"), results.getString("contents"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return retval;
+    }
+
+    public void addAppToDownloads(String userName, Application app) throws SQLException {
+        UserDownloadsStatus curDownloads = getDownloadsN(userName);
+        curDownloads.addApp(app);
+        System.out.println(curDownloads.contents);
+        writeDownloadsToDatabase(curDownloads);
+
+    }
+
+    public void writeDownloadsToDatabase(UserDownloadsStatus status) {
+        try {
+            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/zenithdb", "root", Utils.SQL_PASSWORD);
+            String UPDATE = "UPDATE downloads SET contents = ? WHERE username = ?";
+            PreparedStatement stmt = conn.prepareStatement(UPDATE);
+            stmt.setString(1, status.contents);
+            stmt.setString(2, status.username);
+            stmt.execute();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
