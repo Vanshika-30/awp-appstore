@@ -4,6 +4,7 @@
     Author     : HP
 --%>
 
+
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!-- Navigation -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
@@ -14,7 +15,7 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
-            <ul class="navbar-nav ml-auto">
+            <ul class="navbar-nav ml-auto" style="display:flex;justify-content: center;align-items: center">
                 <li class="nav-item active">
                     <a class="nav-link" href="index.html">Home
                         <span class="sr-only">(current)</span>
@@ -43,12 +44,12 @@
                 <li class="nav-item">
                     <form action="searchResults.html" method="POST">
                     
-                        <input type="text" name="searchTerm" id="searchTerm" /> <button id="myButton"  >Search</button>
-                         <script type="text/javascript">
+                        <input type="text" name="searchTerm" id="searchTerm" style="margin-left: 10px;margin-right: 0px"/> <button id="myButton" style="margin-left: 0px"><i class="fa fa-search"></i></button>
+                        <script type="text/javascript">
                         document.getElementById("myButton").onclick = function () {
                             location.href = "searchResults.html";
                         };
-                    </script>
+                        </script>
                     </form>
                 </li>
             </ul>

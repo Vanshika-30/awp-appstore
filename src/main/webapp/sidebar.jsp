@@ -1,10 +1,4 @@
-<%-- try {
-   Class.forName("oracle.jdbc.driver.OracleDriver");
-}
-catch(ClassNotFoundException ex) {
-   System.out.println("Error: unable to load driver class!");
-   System.exit(1);
-}
+<%-- 
     Document   : sidebar
     Created on : Jun 10, 2020, 5:45:24 PM
     Author     : HP
