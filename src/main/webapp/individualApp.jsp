@@ -33,7 +33,7 @@
                     document.getElementById("status").innerHTML = request.responseText;
                 }
             };
-            request.open("GET","individualPage.html?id=${id}",true);
+            request.open("GET","subscribeHell?id=${id}",true);
             request.send();
         }
         window.setInterval(function(){
@@ -44,7 +44,13 @@
 <body>
 <jsp:include page="/header.jsp"/>
 <div class="container">
-
+<c:set var="ott" value='${sessionScope["appLs"]}'/>
+<c:set var="flag" value="${false}"/>
+<c:forEach var="op" items="${ott}">
+    <c:if test="${op.getId()==app.getId()}">
+        <c:set var="flag" value="${true}"/>
+    </c:if>
+</c:forEach>
     <div class="row">
         <jsp:include page="/sidebar.jsp"/>
         <c:set var="cat" value='${app.getCategory()}'/>
@@ -56,14 +62,17 @@
                 <img class="card-img-top img-fluid" src='${app.getLogo()}' alt="${app.getName()}"
                      style="width:fit-content;height:auto">
                 <c:choose>
-                    <c:when test="${check == true && cat!=AppCategory.BETA}">
+                    <c:when test="${check == true && cat!=AppCategory.BETA && !flag}">
                         <span class='text-right'><a href="download.html?appId=${app.getId()}"><button class='btn btn-primary'><c:out value='${msg}'/></button></a></span>
                     </c:when>
-                    <c:when test='${check == true && cat == AppCategory.BETA && (status == "none" || status == null)}'>
+                    <c:when test="${check == true && cat!=AppCategory.BETA && flag}">
+                        <span class='text-right'><a href="download.html?appId=-1"><button class='btn btn-primary'>Go back to Downloads</button></a></span>
+                    </c:when>
+                    <c:when test='${check == true && cat == AppCategory.BETA && !flag}'>
                         <span class='text-right'><a href="download.html?appId=${app.getId()}"><button class='btn btn-primary'><c:out value='${msg}'/></button></a></span>
                     </c:when>
-                    <c:when test="${check == true && cat==AppCategory.BETA}">
-                            <span class='text-right'><c:out value="${status}"/></span>
+                    <c:when test="${check == true && cat==AppCategory.BETA && flag}">
+                            <span class='text-left' id="status"></span>
                     </c:when>
                     <c:otherwise>
                         <span class='text-right'><a href="login.jsp"><button class='btn btn-primary'>Login to <c:out value='${msg}'/></button></a></span>
@@ -82,7 +91,6 @@
 
                 <c:set var="id1" value="${app.getId()}"/>
                 <c:set var="item" value='${requestScope["appList"]}'/>
-                <c:set var="ott" value='${sessionScope["appLs"]}'/>
                 <c:forEach var="appli" items="${item}">
                     <c:set var="check" value="${false}"/>
                     <c:forEach var="op" items="${ott}">

@@ -1,4 +1,4 @@
-WEBSOCKET_URL = "ws://localhost:8080/AppStore_war_exploded/appStatus"
+WEBSOCKET_URL = "ws://localhost:8080/AppStore/appStatus"
 var userName = document.getElementById("username_holder").innerText.split(" ")[2]
 var body = document.getElementById("app_status_body")
 var webSocket = new WebSocket(WEBSOCKET_URL);

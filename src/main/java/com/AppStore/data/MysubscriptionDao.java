@@ -25,22 +25,22 @@ public class MysubscriptionDao extends Downloads{
     String sql1 = "select * from mysubscriptiondb where id=? and username=?";
     String query = "insert into mysubscriptiondb (id,username,status)" + " values (?,?,?)";
     String url = "jdbc:mysql://localhost:3306/zenithdb";
-    String username = "root";
+    String un = "root";
    
 
 //    public MysubscriptionDao() {
 //         Downloads mysub = new Downloads();
 //    }
-    public void addtomysubscription(Long id,String username, String status) throws SQLException {
+    public void addtomysubscription(int id,String username, String status) throws SQLException {
 
         System.out.println("hello");
         
         try{
             Class.forName("com.mysql.jdbc.Driver");
-            Connection con = DriverManager.getConnection(url,username, Utils.SQL_PASSWORD);
+            Connection con = DriverManager.getConnection(url,un, Utils.SQL_PASSWORD);
 
             PreparedStatement st = con.prepareStatement(query);
-            st.setLong(1, id);
+            st.setInt(1, id);
             st.setString(2,username);
             st.setString(3,status);
             st.execute();
@@ -51,13 +51,13 @@ public class MysubscriptionDao extends Downloads{
       
      
      }
-    public boolean checkifsubscribed(Long id,String username) throws SQLException{
+    public boolean checkifsubscribed(int id,String username) throws SQLException{
         try{
             Class.forName("com.mysql.jdbc.Driver");
-            Connection con = DriverManager.getConnection(url,username, Utils.SQL_PASSWORD);
+            Connection con = DriverManager.getConnection(url,un, Utils.SQL_PASSWORD);
 
-             PreparedStatement st = con.prepareStatement(sql1);
-            st.setLong(1,id);
+            PreparedStatement st = con.prepareStatement(sql1);
+            st.setInt(1,id);
             st.setString(2,username);
             ResultSet rs = st.executeQuery();
             System.out.println("In rs");
@@ -70,6 +70,31 @@ public class MysubscriptionDao extends Downloads{
 
         }
         return false;
+    }
+    
+    public String getStatus(int id,String username) throws SQLException, ClassNotFoundException{
+        Class.forName("com.mysql.jdbc.Driver");
+        Connection con = DriverManager.getConnection(url,un, Utils.SQL_PASSWORD);
+
+        PreparedStatement st = con.prepareStatement(sql1);
+        st.setInt(1,id);
+        st.setString(2,username);
+        ResultSet rs = st.executeQuery();
+        while(rs.next()){
+            return (String)rs.getString("status");
+        }
+        return "blank";
+    }
+
+    public void setStatus(int id,String username,String status) throws SQLException, ClassNotFoundException{
+        Class.forName("com.mysql.jdbc.Driver");
+        Connection con = DriverManager.getConnection(url,un, Utils.SQL_PASSWORD);
+        String qqq = "UPDATE mysubscriptiondb SET status=? WHERE id=? and username=?";
+        PreparedStatement st = con.prepareStatement(qqq);
+        st.setString(1,status);
+        st.setInt(2,id);
+        st.setString(3,username); 
+        st.executeUpdate();
     }
     
    }
