@@ -35,7 +35,7 @@ public class Login extends HttpServlet {
                 HttpSession session = request.getSession();
                 session.setAttribute("uname", uname);
                 ServletContext context = getServletContext();
-                RequestDispatcher dispatch = context.getRequestDispatcher("/admin.jsp");
+                RequestDispatcher dispatch = context.getRequestDispatcher("/admin");
                 dispatch.forward(request, response);
             }
         }

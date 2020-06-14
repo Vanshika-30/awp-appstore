@@ -6,6 +6,8 @@ import java.util.List;
 
 import com.AppStore.domain.AppCategory;
 import com.AppStore.domain.Application;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -13,8 +15,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
-@WebServlet(name = "AdminController", urlPatterns = {"/AdminController"})
+@WebServlet(name = "AdminController", urlPatterns = {"/admin"})
 public class AdminController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -38,38 +41,46 @@ public class AdminController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 //		response.getWriter().append("Served at: ").append(request.getContextPath());
-		
-		String action = request.getServletPath();
-		
-		try {
-			
-			 switch (action) {
-	            case "/new":
-	                showNewForm(request, response);
-	                break;
-	            case "/insert":
-	                insertApp(request, response);
-	                break;
-	            case "/delete":
-	                deleteApp(request, response);
-	                break;
-	            case "/edit":
-	                showEditForm(request, response);
-	                break;
-	            case "/update":
-	                updateApp(request, response);
-	                break;
-	            default:
-	                listApp(request, response);
-	                break;
-	            }
-			
-			
-			
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		HttpSession session = request.getSession();
+		String action = (String)request.getParameter("func");
+                if(action == null){
+                    try {
+                        listApp(request,response);
+                    } catch (Exception ex) {
+                        Logger.getLogger(AdminController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+                else{
+                    try {
+
+                        switch (action) {
+                        case "new":
+                            showNewForm(request, response);
+                            break;
+                        case "insert":
+                            insertApp(request, response);
+                            break;
+                        case "delete":
+                            deleteApp(request, response);
+                            break;
+                        case "edit":
+                            showEditForm(request, response);
+                            break;
+                        case "update":
+                            updateApp(request, response);
+                            break;
+                        default:
+                            listApp(request, response);
+                            break;
+                        }
+
+
+
+                    } catch (Exception e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
+                    }
+                }
 	}
 	
 
@@ -101,7 +112,7 @@ public class AdminController extends HttpServlet {
 		
 		Application new_app = new Application(id,name,desc,AppCategory.valueOf(category),num_download,rating,logo,version);
 		appcrud.insertApp(new_app);
-		response.sendRedirect("list");	
+		response.sendRedirect("admin?func=list");	
 	}
 	
 	private void showNewForm(HttpServletRequest request, HttpServletResponse response) throws Exception
@@ -133,7 +144,7 @@ public class AdminController extends HttpServlet {
 		
 		Application new_app = new Application(id,name,desc,AppCategory.valueOf(category),num_download,rating,logo,version);
 		appcrud.updateApp(new_app);
-		response.sendRedirect("list");	
+		response.sendRedirect("admin?func=list");	
 	 }
 	 
 	 private void deleteApp(HttpServletRequest request, HttpServletResponse response) throws Exception
@@ -141,7 +152,7 @@ public class AdminController extends HttpServlet {
 		 int id = Integer.parseInt(request.getParameter("id"));
 		 System.out.println(id);
 		 appcrud.deleteApp(id);
-		 response.sendRedirect("list");
+		 response.sendRedirect("admin?func=list");
 	 }
 	 
 	 

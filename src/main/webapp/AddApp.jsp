@@ -132,9 +132,9 @@
 	
         <h1 >App Management</h1>
         <h4>
-            <a href="AdminController/new"><button class="btn-primary">Add New App</button></a>
+            <a href="admin?func=new"><button class="btn-primary">Add New App</button></a>
             &nbsp;&nbsp;&nbsp;
-            <a href="AdminController/list"><button class="btn-primary">List All Apps</button></a>
+            <a href="admin?func=list"><button class="btn-primary">List All Apps</button></a>
           </h4> 
         
     </center>
@@ -143,10 +143,10 @@
 <div class="signup-form">
 
 	<c:if test="${app != null}">
-            <form action="AdminController/update" method="post" class = "form-horizontal">
+            <form action="admin?func=update" method="post" class = "form-horizontal">
         </c:if>
         <c:if test="${app == null}">
-            <form action="AdminController/insert" method="post" class = "form-horizontal">
+            <form action="admin?func=insert" method="post" class = "form-horizontal">
         </c:if>
 
 		<div class="col-xs-8 col-xs-offset-4">

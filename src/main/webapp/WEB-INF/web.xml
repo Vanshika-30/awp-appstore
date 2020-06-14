@@ -19,4 +19,12 @@
         <servlet-name>UserDownloads</servlet-name>
         <url-pattern>/download.html</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>AdminController</servlet-name>
+        <servlet-class>com.AppStore.servlets.AdminController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AdminController</servlet-name>
+        <url-pattern>/admin</url-pattern>
+    </servlet-mapping>
 </web-app>

@@ -194,7 +194,7 @@ $(document).ready(function(){
 						<h2>App <b>Management</b></h2>
 					</div>
 					<div class="col-sm-7">
-						<a href="/test3/new" class="btn btn-primary"><i class="material-icons">&#xE147;</i> <span>Add New App</span></a>					
+						<a href="admin?func=new" class="btn btn-primary"><i class="material-icons">&#xE147;</i> <span>Add New App</span></a>					
 					</div>
                 </div>
             </div>
@@ -221,9 +221,9 @@ $(document).ready(function(){
 	                    <td><c:out value="${app.rating}" /></td>
 	                    <td><c:out value="${app.version}" /></td>
 	                    <td>
-	                        <a class="settings" title="Settings" data-toggle="tooltip"  href="/edit?id=<c:out value='${app.id}'/>">Edit</a>
+	                        <a class="settings" title="Settings" data-toggle="tooltip"  href="admin?func=edit&id=<c:out value='${app.id}'/>">Edit</a>
 	                        &nbsp;&nbsp;&nbsp;&nbsp;
-	                        <a href="/delete?id=<c:out value='${app.id}'  />"  class="delete" title="Delete" data-toggle="tooltip">Delete</a>                     
+	                        <a href="admin?func=delete&id=<c:out value='${app.id}'/>"class="delete" title="Delete" data-toggle="tooltip">Delete</a>                     
 	                    </td>
 	                </tr>
             	</c:forEach>
