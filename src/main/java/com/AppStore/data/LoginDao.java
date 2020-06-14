@@ -20,13 +20,13 @@ public class LoginDao {
             st.setString(1,uname);
             st.setString(2,pass);
             ResultSet rs = st.executeQuery();
-            System.out.println("In rs");
+//            System.out.println("In rs");
 
             PreparedStatement st1 = con.prepareStatement(sql2);
             st1.setString(1,uname);
             st1.setString(2,pass);
             ResultSet rs1 = st1.executeQuery();
-            System.out.println("In rs2");
+//            System.out.println("In rs2");
 
 //			ResultSetMetaData rsmd = (ResultSetMetaData) rs.getMetaData();
 //			int columnsNumber = rsmd.getColumnCount();
@@ -40,7 +40,7 @@ public class LoginDao {
 //			}
 
             if(rs.next()) {
-//				System.out.println("In if");
+//				System.out.println(rs.getString(1));
                 return true;
             }
             else if(rs1.next()) {

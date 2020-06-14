@@ -31,8 +31,8 @@
                 <div style="width:200px;position: relative; font-family: Arial; size:landscape;">
                     <label> Type:</label>
                     <select name="type" id="type">
-                        <option value="admin">Admin</option>
                         <option value="customer">Customer</select>
+                        <option value="admin">Admin</option>
                     </select>
                 </div>
 

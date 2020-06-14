@@ -56,10 +56,6 @@ public class DatabaseInitialize {
                 prepStm.execute();
             }
 
-            try (PreparedStatement prepStm = conn.prepareStatement("DROP TABLE IF EXISTS downloads;")) {
-                prepStm.execute();
-            }
-
             try (PreparedStatement prepStm = conn.prepareStatement("DROP TABLE IF EXISTS mysubscriptiondb;")) {
                 prepStm.execute();
             }
@@ -83,7 +79,7 @@ public class DatabaseInitialize {
                 }
             }
 
-            try (PreparedStatement prepStm = conn.prepareStatement("CREATE TABLE downloads (userName varchar(30), contents TEXT);")) {
+            try (PreparedStatement prepStm = conn.prepareStatement("CREATE TABLE IF NOT EXISTS downloads (userName varchar(30), contents TEXT);")) {
                 prepStm.execute();
             }
             try (PreparedStatement prepStm = conn.prepareStatement("CREATE TABLE IF NOT EXISTS customerData (Name varchar(30), Email varchar(30), Telephone varchar(20),Password varchar(25));")) {
