@@ -53,8 +53,6 @@ public class AppCrud {
         statement.setDouble(6, app.getRating());
         statement.setString(7, app.getLogo());
         statement.setDouble(8, app.getVersion());
-
-        boolean rowInserted = statement.executeUpdate() > 0;
         statement.close();
     }
 
