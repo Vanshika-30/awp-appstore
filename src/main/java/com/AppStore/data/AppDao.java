@@ -5,39 +5,37 @@
  */
 package com.AppStore.data;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.AppStore.domain.AppCategory;
 import com.AppStore.domain.Application;
 import com.AppStore.domain.Downloads;
 import com.AppStore.domain.UserDownloadsStatus;
 import com.AppStore.utils.Utils;
-import com.mysql.cj.jdbc.result.ResultSetImpl;
+
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class AppDao {
+    Connection conn;
 
     public AppDao() {
         DatabaseInitialize initialize = new DatabaseInitialize();
         initialize.initializeDatabase();
+        try {
+            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/zenithdb", "root", Utils.SQL_PASSWORD);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
     }
 
     public List<Downloads> getAllDownloads() {
         List<Downloads> orders = new ArrayList<Downloads>();
-        try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/zenithdb", "root", Utils.SQL_PASSWORD);
-             Statement stm = conn.createStatement();
+        try (
+                Statement stm = conn.createStatement();
         ) {
-
             ResultSet results = stm.executeQuery("SELECT * FROM downloads");
-
             while (results.next()) {
                 Downloads order = new Downloads();
                 order.setId(results.getLong("id"));
@@ -57,7 +55,7 @@ public class AppDao {
 
     public List<MysubscriptionDao> getAllmysubscriptions(String uname) {
         List<MysubscriptionDao> orders = new ArrayList<>();
-        try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/zenithdb", "root", Utils.SQL_PASSWORD);
+        try (
              Statement stm = conn.createStatement();
         ) {
 
@@ -95,7 +93,7 @@ public class AppDao {
 
     public List<Application> getFullApplication() {
         List<Application> items = null;
-        try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/zenithdb", "root", Utils.SQL_PASSWORD);
+        try (
              Statement stm = conn.createStatement();
              ResultSet results = stm.executeQuery("SELECT * FROM apps");
         ) {
@@ -108,7 +106,7 @@ public class AppDao {
 
     public List<Application> find(String searchString) {
         List<Application> items = null;
-        try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/zenithdb", "root", Utils.SQL_PASSWORD);
+        try (
              PreparedStatement stm = conn.prepareStatement("SELECT * FROM apps WHERE name LIKE ? OR description LIKE ? OR category LIKE ? ");
         ) {
 
@@ -126,7 +124,7 @@ public class AppDao {
 
     public Application getItem(int id) {
         List<Application> items = null;
-        try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/zenithdb", "root", Utils.SQL_PASSWORD);
+        try (
              PreparedStatement stm = conn.prepareStatement("SELECT * FROM apps WHERE id = ?");
         ) {
 
@@ -145,7 +143,7 @@ public class AppDao {
         Downloads order = new Downloads();
         order.setStatus("downloading");
         order.setCustomer(customer);
-        try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/zenithdb", "root", Utils.SQL_PASSWORD);
+        try (
              PreparedStatement stm = conn.prepareStatement("INSERT INTO downloads (status, customer) values (?,?)", Statement.RETURN_GENERATED_KEYS);
         ) {
             stm.setString(1, order.getStatus());
@@ -190,7 +188,7 @@ public class AppDao {
     }
 
     public void addToDownloads(String userName, Application item, Double version) {
-        try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/zenithdb", "root", Utils.SQL_PASSWORD);
+        try (
              Statement stm = conn.createStatement();
              ResultSet res = stm.executeQuery("SELECT * FROM downloads WHERE customer = '" + userName + "'");
              PreparedStatement stmUpdate = conn.prepareStatement("UPDATE downloads SET contents = ? WHERE customer = ?");
@@ -216,7 +214,7 @@ public class AppDao {
 
 
     public Downloads getDownloads(Long id) {
-        try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/zenithdb", "root", Utils.SQL_PASSWORD);
+        try (
              Statement stm = conn.createStatement();
              ResultSet res = stm.executeQuery("SELECT * FROM downloads WHERE id = " + id);
         ) {
@@ -235,7 +233,7 @@ public class AppDao {
     }
 
     public void updateDownloadsStatus(Long id, String status) {
-        try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/zenithdb", "root", Utils.SQL_PASSWORD);
+        try (
              Statement stm = conn.createStatement();
              PreparedStatement stmUpdate = conn.prepareStatement("UPDATE downloads SET status = ? WHERE id = ?");
         ) {
@@ -250,7 +248,7 @@ public class AppDao {
 
     public Downloads getUserDownloads(String userName) {
         List<Application> retval = new ArrayList<>();
-        try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/zenithdb", "root", Utils.SQL_PASSWORD);
+        try (
              Statement stm = conn.createStatement();
              ResultSet res = stm.executeQuery("SELECT * FROM downloads WHERE customer = '" + userName + "'");
         ) {
@@ -270,7 +268,7 @@ public class AppDao {
     }
 
     public void newDownloadsN(String username) throws SQLException {
-        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/zenithdb", "root", Utils.SQL_PASSWORD);
+        
         String STATEMENT = "INSERT INTO downloads (userName, contents) values (?, '')";
         PreparedStatement stmt = conn.prepareStatement(STATEMENT);
         stmt.setString(1, username);
@@ -298,7 +296,7 @@ public class AppDao {
     public UserDownloadsStatus getDownloadsN(String userName) {
         UserDownloadsStatus retval = null;
         try {
-            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/zenithdb", "root", Utils.SQL_PASSWORD);
+            
             String QUERY = "SELECT * FROM downloads WHERE userName = ?";
             PreparedStatement stmt = conn.prepareStatement(QUERY);
             stmt.setString(1, userName);
@@ -324,7 +322,7 @@ public class AppDao {
 
     public void writeDownloadsToDatabase(UserDownloadsStatus status) {
         try {
-            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/zenithdb", "root", Utils.SQL_PASSWORD);
+            
             String UPDATE = "UPDATE downloads SET contents = ? WHERE username = ?";
             PreparedStatement stmt = conn.prepareStatement(UPDATE);
             stmt.setString(1, status.contents);

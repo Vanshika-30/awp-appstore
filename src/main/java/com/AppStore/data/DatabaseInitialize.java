@@ -56,6 +56,10 @@ public class DatabaseInitialize {
                 prepStm.execute();
             }
 
+            try (PreparedStatement prepStm = conn.prepareStatement("DROP TABLE IF EXISTS downloads;")) {
+                prepStm.execute();
+            }
+
             try (PreparedStatement prepStm = conn.prepareStatement("DROP TABLE IF EXISTS mysubscriptiondb;")) {
                 prepStm.execute();
             }
