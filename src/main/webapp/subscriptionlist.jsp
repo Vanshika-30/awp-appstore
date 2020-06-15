@@ -2,8 +2,9 @@
     pageEncoding="ISO-8859-1"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page import="java.util.List"%>
+<%@page import="com.AppStore.domain.mysubscription" %>
+
 <!DOCTYPE html>
-<% List applist = (List)session.getAttribute("applist");%>
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -192,42 +193,39 @@ $(document).ready(function(){
                 <div class="row">
                     <div class="col-sm-5">
 						<h2>App <b>Management</b></h2>
-		</div>
-                    <div>
-                        <div class="col-sm-7">
+					</div>
+					<div class="col-sm-7">
 						<a href="admin?func=new" class="btn btn-primary"><i class="material-icons">&#xE147;</i> <span>Add New App</span></a>					
-                                                <a href="SubscriptionControl?func1=pending" class="btn btn-primary"><i class="material-icons">&#xE147;</i> <span>Subscriptions</span></a>
-                        </div>
-                                     
-                    </div>
+					
+                                                <a href="SubscriptionControl?func1=pending" class="btn btn-primary"><i class="material-icons">&#xE147;</i> <span>NEW REQUESTS</span></a>	
+						<a href="SubscriptionControl?func1=list" class="btn btn-primary"><i class="material-icons">&#xE147;</i> <span>Subscriptions</span></a>					
+                                        </div>
                 </div>
             </div>
             <table class="table table-striped table-hover">
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>Name</th>						
-						<th>App Category</th>
-						<th>Downloads</th>
-                        <th>rating</th>
-                        <th>version</th>
+                        <th>UserName</th>						
+						<th>App ID</th>
+                                                <th>App Name</th>
+                                                <th>Status</th>
 						<th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-               
-                  <c:forEach var="app" items="${applist}">
+                    <c:set var="item" value='${requestScope["appl"]}'/>
+                        <c:forEach var="app" items="${item}">
 	                <tr>
-	                    <td><c:out value="${app.id}" /></td>
-	                    <td><c:out value="${app.name}" /></td>
-	                    <td><c:out value="${app.category}" /></td>
-	                    <td><c:out value="${app.numDownloads}" /></td>
-	                    <td><c:out value="${app.rating}" /></td>
-	                    <td><c:out value="${app.version}" /></td>
+	                    
+	                    <td><c:out value="${app.getUsername()}" /></td>
+                            <td><c:out value="${app.getId1()}" /></td>
+                            <td><c:out value="${app.getAppName()}" /></td>
+	                    <td><c:out value="${app.getStatus1()}" /></td>
+	
 	                    <td>
-	                        <a class="settings" title="Settings" data-toggle="tooltip"  href="admin?func=edit&id=<c:out value='${app.id}'/>">Edit</a>
-	                        &nbsp;&nbsp;&nbsp;&nbsp;
-	                        <a href="admin?func=delete&id=<c:out value='${app.id}'/>"class="delete" title="Delete" data-toggle="tooltip">Delete</a>                     
+	                        <a class="settings" title="Settings" data-toggle="tooltip"  href="SubscriptionControl?func1=accept&id=<c:out value='${app.id1}'/>&uname=<c:out value='${app.username}'/>">accept</a>
+	                                                    
 	                    </td>
 	                </tr>
             	</c:forEach>

@@ -42,13 +42,23 @@ public class AdminController extends HttpServlet {
         // TODO Auto-generated method stub
 //		response.getWriter().append("Served at: ").append(request.getContextPath());
         HttpSession session = request.getSession();
+        boolean isAdmin = false;
+        if(session.getAttribute("isadmin")!=null){
+            isAdmin = (boolean)session.getAttribute("isadmin");
+        }
         String action = (String) request.getParameter("func");
         if (action == null) {
-            try {
-                listApp(request, response);
-            } catch (Exception ex) {
-                Logger.getLogger(AdminController.class.getName()).log(Level.SEVERE, null, ex);
+            if(isAdmin){
+                try {
+                    listApp(request,response);
+                } catch (Exception ex) {
+                    Logger.getLogger(AdminController.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
+            else{
+                response.sendRedirect("index.html");   
+            }
+            
         } else {
             try {
 
@@ -68,9 +78,19 @@ public class AdminController extends HttpServlet {
                     case "update":
                         updateApp(request, response);
                         break;
-                    default:
+                    case "list":
                         listApp(request, response);
                         break;
+                    default:
+                        if(isAdmin){
+                            listApp(request, response);
+                            break;
+                        }
+                        else{
+                            response.sendRedirect("index.html");
+                            break;
+                        }
+                        
                 }
 
 

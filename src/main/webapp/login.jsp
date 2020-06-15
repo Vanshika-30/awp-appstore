@@ -32,7 +32,7 @@
                     <label> Type:</label>
                     <select name="type" id="type">
                         <option value="customer">Customer</select>
-                        <option value="admin">Admin</option>
+                    <option value="admin">Admin</option>
                     </select>
                 </div>
 

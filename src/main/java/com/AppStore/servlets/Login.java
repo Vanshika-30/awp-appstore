@@ -34,6 +34,7 @@ public class Login extends HttpServlet {
             if(uname.equals("admin") && pass.equals("admin")) {
                 HttpSession session = request.getSession();
                 session.setAttribute("uname", uname);
+                session.setAttribute("isadmin",true);
                 ServletContext context = getServletContext();
                 RequestDispatcher dispatch = context.getRequestDispatcher("/admin");
                 dispatch.forward(request, response);
@@ -50,6 +51,7 @@ public class Login extends HttpServlet {
                     session.setAttribute("uname", uname);
                     ServletContext context = getServletContext();
                     session.setAttribute("LoggedIn", true);
+                    session.setAttribute("isadmin", false);
                     RequestDispatcher dispatch = context.getRequestDispatcher("/index.html");
                     dispatch.forward(request, response);
                 }

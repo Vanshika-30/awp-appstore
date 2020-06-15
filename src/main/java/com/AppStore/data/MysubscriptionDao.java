@@ -6,12 +6,14 @@
 package com.AppStore.data;
 import com.AppStore.domain.Application;
 import com.AppStore.domain.Downloads;
+import com.AppStore.domain.mysubscription;
 import com.AppStore.utils.Utils;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,16 +23,15 @@ import java.util.List;
  */
 
 
-public class MysubscriptionDao extends Downloads{
+public class MysubscriptionDao{
     String sql1 = "select * from mysubscriptiondb where id=? and username=?";
     String query = "insert into mysubscriptiondb (id,username,status)" + " values (?,?,?)";
     String url = "jdbc:mysql://localhost:3306/zenithdb";
     String un = "root";
-   
-
-//    public MysubscriptionDao() {
-//         Downloads mysub = new Downloads();
-//    }
+    private AppDao newapp = null;
+    public MysubscriptionDao() {
+         newapp = DataConnection.getAppDao();
+    }
     public void addtomysubscription(int id,String username, String status) throws SQLException {
 
         System.out.println("hello");
@@ -96,8 +97,58 @@ public class MysubscriptionDao extends Downloads{
         st.setString(3,username); 
         st.executeUpdate();
     }
+    public  List<mysubscription> getAllmysubscriptions(String sta) {
+        String statusreport = "subscribed!";
+        List<mysubscription> orders = new ArrayList<>();
+        Application app = new Application();
+        try {
+            
+            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/zenithdb", "root", Utils.SQL_PASSWORD);
+            PreparedStatement st = conn.prepareStatement("SELECT * FROM mysubscriptiondb WHERE status LIKE ?");
+            st.setString(1,statusreport);
+            ResultSet results = st.executeQuery();
+            while (results.next()) {
+                mysubscription order = new mysubscription();
+                
+                order.id1=results.getInt("id");
+                order.username=results.getString("username");
+                order.status1=results.getString("status");
+                app =newapp.getItem(order.id1);
+                order.appname=app.getName();
+                orders.add(order);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return orders;
+    }
     
-   }
+    public List<mysubscription> getAllPendingSubscriptions(String status) {
+        String statusreport = "pending...";
+        List<mysubscription> orders = new ArrayList<>();
+        Application app = new Application();
+        try {
+            
+            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/zenithdb", "root", Utils.SQL_PASSWORD);
+            PreparedStatement st = conn.prepareStatement("SELECT * FROM mysubscriptiondb WHERE status LIKE ?");
+            st.setString(1,statusreport);
+            ResultSet results = st.executeQuery();
+            while (results.next()) {
+                mysubscription order = new mysubscription();
+                
+                order.id1=results.getInt("id");
+                order.username=results.getString("username");
+                order.status1=results.getString("status");
+                app =newapp.getItem(order.id1);
+                order.appname=app.getName();
+                orders.add(order);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return orders;
+    }
+}
 
 
 
